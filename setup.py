@@ -1,4 +1,4 @@
-import sys 
+import sys
 import os
 from cx_Freeze import setup, Executable
 
@@ -20,4 +20,5 @@ setup(
     author = "Wanderson M. Pimenta",
     options = {'build_exe' : {'include_files' : files}},
     executables = [target]
+    
 )

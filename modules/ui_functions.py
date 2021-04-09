@@ -36,6 +36,10 @@ class UIFunctions(MainWindow):
             self.ui.maximizeRestoreAppBtn.setToolTip("Restore")
             self.ui.maximizeRestoreAppBtn.setIcon(QIcon(u":/icons/images/icons/icon_restore.png"))
             self.ui.frame_size_grip.hide()
+            self.left_grip.hide()
+            self.right_grip.hide()
+            self.top_grip.hide()
+            self.bottom_grip.hide()
         else:
             GLOBAL_STATE = False
             self.showNormal()
@@ -44,6 +48,10 @@ class UIFunctions(MainWindow):
             self.ui.maximizeRestoreAppBtn.setToolTip("Maximize")
             self.ui.maximizeRestoreAppBtn.setIcon(QIcon(u":/icons/images/icons/icon_maximize.png"))
             self.ui.frame_size_grip.show()
+            self.left_grip.show()
+            self.right_grip.show()
+            self.top_grip.show()
+            self.bottom_grip.show()
 
     # RETURN STATUS
     # ///////////////////////////////////////////////////////////////
@@ -206,8 +214,13 @@ class UIFunctions(MainWindow):
                     self.move(self.pos() + event.globalPos() - self.dragPos)
                     self.dragPos = event.globalPos()
                     event.accept()
-
             self.ui.titleRightInfo.mouseMoveEvent = moveWindow
+
+            # CUSTOM GRIPS
+            self.left_grip = CustomGrip(self, Qt.LeftEdge, True)
+            self.right_grip = CustomGrip(self, Qt.RightEdge, True)
+            self.top_grip = CustomGrip(self, Qt.TopEdge, True)
+            self.bottom_grip = CustomGrip(self, Qt.BottomEdge, True)
 
         else:
             self.ui.appMargins.setContentsMargins(0, 0, 0, 0)
@@ -236,6 +249,13 @@ class UIFunctions(MainWindow):
 
         # CLOSE APPLICATION
         self.ui.closeAppBtn.clicked.connect(lambda: self.close())
+
+    def resize_grips(self):
+        if Settings.ENABLE_CUSTOM_TITLE_BAR:
+            self.left_grip.setGeometry(0, 10, 10, self.height())
+            self.right_grip.setGeometry(self.width() - 10, 10, 10, self.height())
+            self.top_grip.setGeometry(0, 0, self.width(), 10)
+            self.bottom_grip.setGeometry(0, self.height() - 10, self.width(), 10)
 
     # ///////////////////////////////////////////////////////////////
     # END - GUI DEFINITIONS
