@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'mainTxlWnG.ui'
+## Form generated from reading UI file 'maingnxZcz.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.0.2
 ##
@@ -770,14 +770,16 @@ class Ui_MainWindow(object):
         self.extraTopLayout.setContentsMargins(10, -1, 10, -1)
         self.extraIcon = QFrame(self.extraTopBg)
         self.extraIcon.setObjectName(u"extraIcon")
+        self.extraIcon.setMinimumSize(QSize(20, 0))
         self.extraIcon.setMaximumSize(QSize(20, 20))
-        self.extraIcon.setFrameShape(QFrame.StyledPanel)
+        self.extraIcon.setFrameShape(QFrame.NoFrame)
         self.extraIcon.setFrameShadow(QFrame.Raised)
 
         self.extraTopLayout.addWidget(self.extraIcon, 0, 0, 1, 1)
 
         self.extraLabel = QLabel(self.extraTopBg)
         self.extraLabel.setObjectName(u"extraLabel")
+        self.extraLabel.setMinimumSize(QSize(150, 0))
 
         self.extraTopLayout.addWidget(self.extraLabel, 0, 1, 1, 1)
 
@@ -1655,5 +1657,6 @@ class Ui_MainWindow(object):
         self.btn_print.setText(QCoreApplication.translate("MainWindow", u"Print", None))
         self.btn_logout.setText(QCoreApplication.translate("MainWindow", u"Logout", None))
         self.creditsLabel.setText(QCoreApplication.translate("MainWindow", u"By: Wanderson M. Pimenta", None))
-        self.version.setText(QCoreApplication.translate("MainWindow", u"v1.0.2", None))
+        self.version.setText(QCoreApplication.translate("MainWindow", u"v1.0.3", None))
     # retranslateUi
+
