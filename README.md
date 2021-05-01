@@ -42,10 +42,10 @@ python setup.py build
 
 > **themes/**: add here your themes (.qss).
 
-> **modules/**: module for running PyDragula GUI.
+> **modules/**: module for running PyDracula GUI.
 
 > **modules/app_funtions.py**: add your application's functions here.
-
+Up
 > **modules/app_settings.py**: global variables to configure user interface.
 
 > **modules/resources_rc.py**: "resource.qrc" file compiled for python using the command: ```pyside6-rcc resources.qrc -o resources_rc.py```.
