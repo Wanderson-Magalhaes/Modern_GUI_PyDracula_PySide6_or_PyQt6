@@ -15,6 +15,17 @@ Presentation and tutorial video with the main functions of the user interface.
 ![PyDracula_Default_Dark](https://user-images.githubusercontent.com/60605512/112993874-0b647700-9140-11eb-8670-61322d70dbe3.png)
 ![PyDracula_Light](https://user-images.githubusercontent.com/60605512/112993918-18816600-9140-11eb-837c-e7a7c3d2b05e.png)
 
+# High DPI
+> Qt Widgets is an old technology and does not have a good support for high DPI settings, making these images look distorted when your system has DPI applied above 100%.
+You can minimize this problem using a workaround by applying this code below in "main.py" just below the import of the Qt modules.
+```python
+# ADJUST QT FONT DPI FOR HIGHT SCALE
+# ///////////////////////////////////////////////////////////////
+from modules import *
+from widgets import *
+os.environ["QT_FONT_DPI"] = "96"
+```
+
 # Running
 > Inside your preferred terminal run the commands below depending on your system, remembering before installing Python 3.9> and PySide6 "pip install PySide6".
 > ## **Windows**:
