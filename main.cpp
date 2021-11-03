@@ -1,9 +1,6 @@
-# IMPORT / GUI AND MODULES AND WIDGETS
-# include "modules/header.h" 
-# include "widgets/header.h" 
-
-# SET AS GLOBAL WIDGETS
-# ///////////////////////////////////////////////////////////////
+#include "modules/header.h" 
+#include "widgets/header.h" 
+#include "mainwindow.h"
      
  int main(int argc, char *argv[])
 {
