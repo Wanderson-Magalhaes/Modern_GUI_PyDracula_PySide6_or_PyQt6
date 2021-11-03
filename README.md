@@ -33,14 +33,11 @@ Presentation and tutorial video with the main functions of the user interface.
 Up
 > **modules/app_settings.py**: global variables to configure user interface.
 
-> **modules/resources_rc.py**: "resource.qrc" file compiled for python using the command: ```pyside6-rcc resources.qrc -o resources_rc.py```.
-
 > **modules/ui_functions.py**: add here only functions related to the user interface / GUI.
 
-> **modules/ui_main.py**: file related to the user interface exported by Qt Designer. You can compile it manually using the command: ```pyside6-uic main.ui> ui_main.py ```.
 After expoting in .py and change the line "import resources_rc" to "from. Resoucers_rc import *" to use as a module.
 
-> **images/**: put all your images and icons here before converting to Python (resources_re.py) ```pyside6-rcc resources.qrc -o resources_rc.py```.
+> **images/**: put all your images and icons here and add to resources.qrc
 
 # Projects Created Using PyDracula
 **See the projects that were created using PyDracula.**
