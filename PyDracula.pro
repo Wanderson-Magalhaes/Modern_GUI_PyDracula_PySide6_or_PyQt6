@@ -5,18 +5,22 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 CONFIG += c++11
 TEMPLATE = app
 
-FORMS += main.ui
+FORMS += main.ui \
+    splash_screen.ui
 
 HEADERS += \
             mainwindow.h \
             modules/settings.h \
             ui_main.h \
-            widgets/custom_grips/customgrip.h
+            ui_splash_screen.h \
+            widgets/custom_grips/customgrip.h \
+            widgets/splah_screen/splash_screen.h
 
 SOURCES += \
           main.cpp \
           mainwindow.cpp \
-          widgets/custom_grips/customgrip.cpp
+          widgets/custom_grips/customgrip.cpp \
+          widgets/splah_screen/splash_screen.cpp
 
 RESOURCES += \
     resources.qrc

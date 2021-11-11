@@ -1,13 +1,5 @@
 #include "mainwindow.h"
 
-void MainWindow::openLeftBox(bool b){
-}
-
-// EXTRA RIGHT BOX
-def openCloseRightBox():
-    UIFunctions.toggleRightBox(self, True)
-widgets.settingsTopBtn.clicked.connect(openCloseRightBox
-
 MainWindow::~MainWindow(){
     delete ui;
 }
@@ -26,16 +18,18 @@ QMainWindow(parent){
         // APP NAME
         QString title = "PyDracula - Modern GUI";
         QString description = "PyDracula APP - Theme with colors based on Dracula for Python.";
+
         // APPLY TEXTS
         setWindowTitle(title);
         ui->titleRightInfo->setText(description);
 
         // TOGGLE MENU
         //ui->toggleButton-clicked.connect(lambda: UIFunctions.toggleMenu(self, True));
-        connect(ui->toggleButton,&QPushButton::clicked,[=]{});
+        connect(ui->toggleButton,&QPushButton::clicked,this,&MainWindow::openMenu);
 
         // SET UI DEFINITIONS
         //UIFunctions.uiDefinitions(self)
+            // a redefinir ici
 
         // QTableWidget PARAMETERS
         # ///////////////////////////////////////////////////////////////
@@ -44,44 +38,33 @@ QMainWindow(parent){
         // BUTTONS CLICK
 
         // LEFT MENUS
-        /*
-            ui->btn_home.clicked.connect(self.buttonClick);
-            ui.btn_widgets.clicked.connect(self.buttonClick)
-            ui.btn_new.clicked.connect(self.buttonClick)
-            ui.btn_save.clicked.connect(self.buttonClick)
-        */
-        connect(ui->btn_home,&QPushButton::clicked,[=]{});
-        connect(ui->btn_widgets,&QPushButton::clicked,[=]{});
-        connect(ui->btn_new,&QPushButton::clicked,[=]{});
-        connect(ui->btn_save,&QPushButton::clicked,[=]{});
+
+        connect(ui->btn_home,&QPushButton::clicked,this,&MainWindow::buttonClick);
+        connect(ui->btn_widgets,&QPushButton::clicked,this,&MainWindow::buttonClick);
+        connect(ui->btn_new,&QPushButton::clicked,this,&MainWindow::buttonClick);
+        connect(ui->btn_save,&QPushButton::clicked,this,&MainWindow::buttonClick);
 
 
         // EXTRA LEFT BOX
-        connect(ui->toggleLeftBox);
-        ui->toggleLeftBox.clicked.connect(openCloseLeftBox)
-        widgets.extraCloseColumnBtn.clicked.connect(openCloseLeftBox)
+        connect(ui->toggleLeftBox,&QPushButton::clicked,this,&MainWindow::openLeftBox);
+        connect(ui->extraCloseColumnBtn,&QPushButton::clicked,this,&MainWindow::openLeftBox);
 
         // EXTRA RIGHT BOX
-        def openCloseRightBox():
-            UIFunctions.toggleRightBox(self, True)
-        widgets.settingsTopBtn.clicked.connect(openCloseRightBox)
+        connect(ui->settingsTopBtn,&QPushButton::clicked,this,&MainWindow::openRightBox);
 
         // SET CUSTOM THEME
-        useCustomTheme = False
-        themeFile = "themes\py_dracula_light.qss"
+        bool useCustomTheme = false;
+        QFile themeFile ("themes\\py_dracula_light.qss");
 
         // SET THEME AND HACKS
-        if useCustomTheme:
-            // LOAD AND APPLY STYLE
-            UIFunctions.theme(self, themeFile, True)
-
-            # SET HACKS
-            AppFunctions.setThemeHack(self)
-
-        # SET HOME PAGE AND SELECT MENU
+        if (useCustomTheme){
+           theme(themeFile, true); // LOAD AND APPLY STYLE
+           setThemeHack(); // SET HACKS
+        }
+        // SET HOME PAGE AND SELECT MENU
         # ///////////////////////////////////////////////////////////////
-        widgets.stackedWidget.setCurrentWidget(widgets.home)
-        widgets.btn_home.setStyleSheet(UIFunctions.selectMenu(widgets.btn_home.styleSheet()))
+        ui->stackedWidget->setCurrentWidget(ui->home);
+        ui->btn_home->setStyleSheet(selectMenu(ui->btn_home->styleSheet()));
 }
 
 void MainWindow::setThemeHack(){
@@ -109,7 +92,7 @@ void MainWindow::maximize_restore(){
         GLOBAL_STATE = true;
         ui->appMargins->setContentsMargins(0, 0, 0, 0);
         ui->maximizeRestoreAppBtn->setToolTip("Restore");
-        ui->maximizeRestoreAppBtn->setIcon(QIcon(u":/icons/images/icons/icon_restore.png"));
+        ui->maximizeRestoreAppBtn->setIcon(QIcon(":/icons/images/icons/icon_restore.png"));
         ui->frame_size_grip->hide();
         left_grip.hide();
         right_grip.hide();
@@ -118,16 +101,16 @@ void MainWindow::maximize_restore(){
     }
     else{
         GLOBAL_STATE = false;
-        self.showNormal()
-        self.resize(self.width()+1, self.height()+1)
-        self.ui.appMargins.setContentsMargins(10, 10, 10, 10)
-        self.ui.maximizeRestoreAppBtn.setToolTip("Maximize")
-        self.ui.maximizeRestoreAppBtn.setIcon(QIcon(u":/icons/images/icons/icon_maximize.png"))
-        self.ui.frame_size_grip.show()
-        self.left_grip.show()
-        self.right_grip.show()
-        self.top_grip.show()
-        self.bottom_grip.show()
+        showNormal();
+        resize(width()+1, height()+1);
+        ui->appMargins->setContentsMargins(10, 10, 10, 10);
+        ui->maximizeRestoreAppBtn->setToolTip("Maximize");
+        ui->maximizeRestoreAppBtn->setIcon(QIcon(":/icons/images/icons/icon_maximize->png"));
+        ui->frame_size_grip->show();
+        left_grip.show();
+        right_grip.show();
+        top_grip.show();
+        bottom_grip.show();
     }
 }
 
