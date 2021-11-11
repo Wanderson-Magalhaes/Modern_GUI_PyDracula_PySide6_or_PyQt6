@@ -6,6 +6,8 @@ MainWindow::~MainWindow(){
 
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent),
+    settings(),
+    ui(new Ui::MainWindow),
     dragPos(),
 
     animation(new QPropertyAnimation()),
@@ -13,16 +15,18 @@ MainWindow::MainWindow(QWidget *parent):
     right_box(new QPropertyAnimation()),
     group(new QParallelAnimationGroup()),
 
-    left_grip(nullptr),
-    right_grip(nullptr),
-    top_grip(nullptr),
-    bottom_grip(nullptr),
+    left_grip(new CustomGrip(this, Qt::LeftEdge, true)),
+    right_grip(new CustomGrip(this, Qt::LeftEdge, true)),
+    top_grip(new CustomGrip(this, Qt::LeftEdge, true)),
+    bottom_grip(new CustomGrip(this, Qt::LeftEdge, true)),
     shadow(this)
 {
 
+        qDebug()<<"Window building";
 
         // SET AS GLOBAL WIDGETS
         ui->setupUi(this);
+        qDebug()<<"Window UI setup";
         //auto widgets = ui;
 
         // USE CUSTOM TITLE BAR | USE AS "False" FOR MAC OR LINUX
@@ -42,6 +46,7 @@ MainWindow::MainWindow(QWidget *parent):
 
         // SET UI DEFINITIONS
         //UIFunctions.uiDefinitions(self)
+        qDebug()<<"Window setting uiDefinitions";
 
         if (settings.ENABLE_CUSTOM_TITLE_BAR){
             //STANDARD TITLE BAR
@@ -49,10 +54,12 @@ MainWindow::MainWindow(QWidget *parent):
             setAttribute(Qt::WA_TranslucentBackground);
             ui->titleRightInfo->installEventFilter(this);
 
+            /*
             left_grip = new CustomGrip(this, Qt::LeftEdge, true);
             right_grip = new CustomGrip(this, Qt::RightEdge, true);
             top_grip = new CustomGrip(this, Qt::TopEdge, true);
             bottom_grip = new CustomGrip(this, Qt::BottomEdge, true);
+            */
         }
         else{
                    ui->appMargins->setContentsMargins(0, 0, 0, 0);
@@ -89,10 +96,10 @@ MainWindow::MainWindow(QWidget *parent):
 
         // LEFT MENUS
 
-        connect(ui->btn_home,&QPushButton::clicked,this,&MainWindow::buttonClick);
-        connect(ui->btn_widgets,&QPushButton::clicked,this,&MainWindow::buttonClick);
-        connect(ui->btn_new,&QPushButton::clicked,this,&MainWindow::buttonClick);
-        connect(ui->btn_save,&QPushButton::clicked,this,&MainWindow::buttonClick);
+        connect(ui->btn_home,&QPushButton::clicked,[=]{buttonClick(ui->btn_home);});
+        connect(ui->btn_widgets,&QPushButton::clicked,[=]{buttonClick(ui->btn_widgets);});
+        connect(ui->btn_new,&QPushButton::clicked,[=]{buttonClick(ui->btn_new);});
+        connect(ui->btn_save,&QPushButton::clicked,[=]{buttonClick(ui->btn_save);});
 
 
         // EXTRA LEFT BOX
@@ -386,3 +393,49 @@ void MainWindow::resize_grips(){
         bottom_grip->setGeometry(0, height() - 10, width(), 10);
 }
 
+void MainWindow::buttonClick(QWidget *btn){
+        // GET BUTTON CLICKED
+        QString btnName = btn->objectName();
+
+        // SHOW HOME PAGE
+        if (btnName == "btn_home"){
+            ui->stackedWidget->setCurrentWidget(ui->home);
+            resetStyle(btnName);
+            btn->setStyleSheet(selectMenu(btn->styleSheet()));
+        }
+        // SHOW WIDGETS PAGE
+        else if (btnName == "btn_widgets"){
+            ui->stackedWidget->setCurrentWidget(ui->widgets);
+            resetStyle(btnName);
+            btn->setStyleSheet(selectMenu(btn->styleSheet()));
+        }
+        // SHOW NEW PAGE
+        else if (btnName == "btn_new"){
+            ui->stackedWidget->setCurrentWidget(ui->new_page); // # SET PAGE
+            resetStyle(btnName); // # RESET ANOTHERS BUTTONS SELECTED
+            btn->setStyleSheet(selectMenu(btn->styleSheet())); // # SELECT MENU
+        }
+        else if (btnName == "btn_save")
+            qDebug("Save BTN clicked!");
+
+        //# PRINT BTN NAME
+        qDebug()<<"Button"+btnName+"pressed!";
+
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event){
+        // Update Size Grips
+        Q_UNUSED(event)
+        resize_grips();
+}
+
+void MainWindow::mousePressEvent(QMouseEvent *event){
+    // SET DRAG POS WINDOW
+    dragPos = event->globalPos();
+
+    // PRINT MOUSE EVENTS
+    if (event->buttons() == Qt::LeftButton)
+        qDebug("Mouse click: LEFT CLICK");
+    if (event->buttons() == Qt::RightButton)
+        qDebug("Mouse click: RIGHT CLICK");
+}

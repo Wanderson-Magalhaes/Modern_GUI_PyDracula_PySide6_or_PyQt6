@@ -1,6 +1,7 @@
 #include "customgrip.h"
 #include <QHBoxLayout>
 #include <QMouseEvent>
+#include <QDebug>
 
 int max(int a,int b){
     return a > b ? a :b;
@@ -86,6 +87,7 @@ CustomGrip::CustomGrip(QWidget *parent, Qt::Edge position, bool disable_color) :
     framegrip(this)
 {
     //setParent(parent);
+    qDebug()<<"CustomGrip building";
     setObjectName("Form");
 
     framegrip.setGeometry(QRect(0, 0, 10, 500));
@@ -210,6 +212,7 @@ CustomGrip::CustomGrip(QWidget *parent, Qt::Edge position, bool disable_color) :
         break;
     }
 
+    qDebug()<<"CustomGrip build";
 }
 
 CustomGrip::~CustomGrip(){
