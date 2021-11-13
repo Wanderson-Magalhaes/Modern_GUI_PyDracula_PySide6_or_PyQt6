@@ -160,8 +160,8 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(1280, 720);
-        MainWindow->setMinimumSize(QSize(940, 560));
+        MainWindow->resize(1280, 700);
+        MainWindow->setMinimumSize(QSize(800, 600));
         styleSheet = new QWidget(MainWindow);
         styleSheet->setObjectName(QString::fromUtf8("styleSheet"));
         QFont font;
@@ -460,7 +460,7 @@ public:
 "ScrollBars */\n"
 "QScrollBar:horizontal {\n"
 "    border: none;\n"
-"    background: rgb(52, 59, 72);\n"
+"    background: rgb(55, 63, 77) /*rgb(52, 59, 72)*/;\n"
 "    height: 8px;\n"
 "    margin: 0px 21px 0 21px;\n"
 "	border-radius: 0px;\n"

@@ -71,9 +71,10 @@ class MainWindow: public QMainWindow
 
     protected :
         bool eventFilter(QObject *obj, QEvent *ev) override;
-        void buttonClick(QWidget *w);
         void resizeEvent(QResizeEvent *event) override;
         void mousePressEvent(QMouseEvent *event) override;
+    protected slots:
+        void buttonClick(void);
             
 };
 

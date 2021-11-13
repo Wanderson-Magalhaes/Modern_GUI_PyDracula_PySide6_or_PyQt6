@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include <QTextCodec>
 
 MainWindow::~MainWindow(){
     delete ui;
@@ -15,15 +16,16 @@ MainWindow::MainWindow(QWidget *parent):
     right_box(new QPropertyAnimation()),
     group(new QParallelAnimationGroup()),
 
-    left_grip(new CustomGrip(this, Qt::LeftEdge, true)),
-    right_grip(new CustomGrip(this, Qt::LeftEdge, true)),
-    top_grip(new CustomGrip(this, Qt::LeftEdge, true)),
-    bottom_grip(new CustomGrip(this, Qt::LeftEdge, true)),
+    left_grip(nullptr),
+    right_grip(nullptr),
+    top_grip(nullptr),
+    bottom_grip(nullptr),
     shadow(this)
 {
 
         qDebug()<<"Window building";
-
+        setAttribute(Qt::WA_StyleSheet);
+        setAttribute(Qt::WA_StyledBackground);
         // SET AS GLOBAL WIDGETS
         ui->setupUi(this);
         qDebug()<<"Window UI setup";
@@ -41,8 +43,7 @@ MainWindow::MainWindow(QWidget *parent):
         ui->titleRightInfo->setText(description);
 
         // TOGGLE MENU
-        //ui->toggleButton-clicked.connect(lambda: UIFunctions.toggleMenu(self, True));
-        connect(ui->toggleButton,&QPushButton::clicked,this,&MainWindow::openMenu);
+        connect(ui->toggleButton,&QPushButton::clicked,[=]{openMenu(true);});
 
         // SET UI DEFINITIONS
         //UIFunctions.uiDefinitions(self)
@@ -53,13 +54,17 @@ MainWindow::MainWindow(QWidget *parent):
             setWindowFlags(Qt::FramelessWindowHint);
             setAttribute(Qt::WA_TranslucentBackground);
             ui->titleRightInfo->installEventFilter(this);
-
+            qDebug()<<"building grips";
             /*
+            delete left_grip;
+            delete right_grip;
+            delete top_grip;
+            delete bottom_grip;*/
             left_grip = new CustomGrip(this, Qt::LeftEdge, true);
             right_grip = new CustomGrip(this, Qt::RightEdge, true);
             top_grip = new CustomGrip(this, Qt::TopEdge, true);
             bottom_grip = new CustomGrip(this, Qt::BottomEdge, true);
-            */
+
         }
         else{
                    ui->appMargins->setContentsMargins(0, 0, 0, 0);
@@ -96,32 +101,33 @@ MainWindow::MainWindow(QWidget *parent):
 
         // LEFT MENUS
 
-        connect(ui->btn_home,&QPushButton::clicked,[=]{buttonClick(ui->btn_home);});
-        connect(ui->btn_widgets,&QPushButton::clicked,[=]{buttonClick(ui->btn_widgets);});
-        connect(ui->btn_new,&QPushButton::clicked,[=]{buttonClick(ui->btn_new);});
-        connect(ui->btn_save,&QPushButton::clicked,[=]{buttonClick(ui->btn_save);});
-
+        connect(ui->btn_home,&QPushButton::clicked,this,&MainWindow::buttonClick);
+        connect(ui->btn_widgets,&QPushButton::clicked,this,&MainWindow::buttonClick);
+        connect(ui->btn_new,&QPushButton::clicked,this,&MainWindow::buttonClick);
+        connect(ui->btn_save,&QPushButton::clicked,this,&MainWindow::buttonClick);
 
         // EXTRA LEFT BOX
-        connect(ui->toggleLeftBox,&QPushButton::clicked,this,&MainWindow::openLeftBox);
-        connect(ui->extraCloseColumnBtn,&QPushButton::clicked,this,&MainWindow::openLeftBox);
+        connect(ui->toggleLeftBox,&QPushButton::clicked,[=]{openLeftBox(true);});
+        connect(ui->extraCloseColumnBtn,&QPushButton::clicked,[=]{openLeftBox(true);});
 
         // EXTRA RIGHT BOX
-        connect(ui->settingsTopBtn,&QPushButton::clicked,this,&MainWindow::openRightBox);
+        connect(ui->settingsTopBtn,&QPushButton::clicked,[=]{openRightBox(true);});
 
         // SET CUSTOM THEME
-        bool useCustomTheme = false;
-        QFile themeFile ("themes\\py_dracula_light.qss");
+        bool useCustomTheme = true;
+        QFile themeFile (":/qss/themes/py_dracula_light.qss");//py_dracula_light
 
         // SET THEME AND HACKS
         if (useCustomTheme){
-           theme(themeFile, true); // LOAD AND APPLY STYLE
            setThemeHack(); // SET HACKS
+           theme(themeFile, true); // LOAD AND APPLY STYLE       
         }
         // SET HOME PAGE AND SELECT MENU
         # ///////////////////////////////////////////////////////////////
         ui->stackedWidget->setCurrentWidget(ui->home);
         ui->btn_home->setStyleSheet(selectMenu(ui->btn_home->styleSheet()));
+
+        move(QApplication::desktop()->availableGeometry().center() - rect().center());
 }
 
 void MainWindow::setThemeHack(){
@@ -162,7 +168,7 @@ void MainWindow::maximize_restore(){
         resize(width()+1, height()+1);
         ui->appMargins->setContentsMargins(10, 10, 10, 10);
         ui->maximizeRestoreAppBtn->setToolTip("Maximize");
-        ui->maximizeRestoreAppBtn->setIcon(QIcon(":/icons/images/icons/icon_maximize->png"));
+        ui->maximizeRestoreAppBtn->setIcon(QIcon(":/icons/images/icons/icon_maximize.png"));
         ui->frame_size_grip->show();
         left_grip->show();
         right_grip->show();
@@ -178,6 +184,7 @@ void MainWindow::setStatus(bool status){
 }
 
 void MainWindow::openMenu(bool enable){
+    //qDebug()<<"Open menu : "<<enable;
     if (!enable) return;
 
     // GET WIDTH
@@ -200,7 +207,8 @@ void MainWindow::openMenu(bool enable){
     animation->start();
 
 }
-void MainWindow::openLeftBox(bool enable){
+void MainWindow::openLeftBox(bool enable){ 
+    //qDebug()<<"openLeftBox : "<<enable;
     if (!enable)
         return;
     // GET WIDTH
@@ -232,6 +240,8 @@ void MainWindow::openLeftBox(bool enable){
 }
 
 void MainWindow::openRightBox(bool enable){
+
+    //qDebug()<<"openRightBox : "<<enable;
     if (!enable)
         return;
 
@@ -335,9 +345,11 @@ void MainWindow::theme(QFile &file,bool useCustomTheme){
     }
     else
     {
-       file.open( QFile::ReadOnly | QFile::Text );
-       QTextStream ts( &file );
-       ui->styleSheet->setStyleSheet( ts.readAll() );
+       file.open(QFile::ReadOnly | QFile::Text);
+       //QByteArray ba = file.readAll();
+       // QTextCodec::codecForName("UTF-8");
+       //QTextStream ts( &file );
+       qApp->setStyleSheet(QString::fromUtf8(file.readAll()));
        qDebug() << "Theme  set";
     }
 
@@ -393,39 +405,40 @@ void MainWindow::resize_grips(){
         bottom_grip->setGeometry(0, height() - 10, width(), 10);
 }
 
-void MainWindow::buttonClick(QWidget *btn){
+void MainWindow::buttonClick(){
         // GET BUTTON CLICKED
-        QString btnName = btn->objectName();
+        QString btnName = sender()->objectName();
 
         // SHOW HOME PAGE
         if (btnName == "btn_home"){
             ui->stackedWidget->setCurrentWidget(ui->home);
             resetStyle(btnName);
-            btn->setStyleSheet(selectMenu(btn->styleSheet()));
+            ui->btn_home->setStyleSheet(selectMenu(ui->btn_home->styleSheet()));
         }
         // SHOW WIDGETS PAGE
         else if (btnName == "btn_widgets"){
             ui->stackedWidget->setCurrentWidget(ui->widgets);
             resetStyle(btnName);
-            btn->setStyleSheet(selectMenu(btn->styleSheet()));
+            ui->btn_widgets->setStyleSheet(selectMenu(ui->btn_widgets->styleSheet()));
         }
         // SHOW NEW PAGE
         else if (btnName == "btn_new"){
             ui->stackedWidget->setCurrentWidget(ui->new_page); // # SET PAGE
             resetStyle(btnName); // # RESET ANOTHERS BUTTONS SELECTED
-            btn->setStyleSheet(selectMenu(btn->styleSheet())); // # SELECT MENU
+            ui->btn_new->setStyleSheet(selectMenu(ui->btn_new->styleSheet())); // # SELECT MENU
         }
-        else if (btnName == "btn_save")
-            qDebug("Save BTN clicked!");
+        //else if (btnName == "btn_save")
+            //qDebug("Save BTN clicked!");
 
         //# PRINT BTN NAME
-        qDebug()<<"Button"+btnName+"pressed!";
+        //qDebug()<<"Button "+btnName+" pressed!";
 
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event){
         // Update Size Grips
         Q_UNUSED(event)
+        //qDebug()<<"Resizing";
         resize_grips();
 }
 
@@ -434,8 +447,8 @@ void MainWindow::mousePressEvent(QMouseEvent *event){
     dragPos = event->globalPos();
 
     // PRINT MOUSE EVENTS
-    if (event->buttons() == Qt::LeftButton)
-        qDebug("Mouse click: LEFT CLICK");
-    if (event->buttons() == Qt::RightButton)
-        qDebug("Mouse click: RIGHT CLICK");
+    //if (event->buttons() == Qt::LeftButton)
+        //qDebug("Mouse click: LEFT CLICK");
+    //if (event->buttons() == Qt::RightButton)
+        //qDebug("Mouse click: RIGHT CLICK");
 }
