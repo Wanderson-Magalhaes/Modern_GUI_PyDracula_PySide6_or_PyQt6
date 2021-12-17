@@ -1,0 +1,27 @@
+QToolTip {
+        color: #333;
+        background-color: #f8f8f2;
+        border: 1px solid #CCC;
+        background-image: none;
+        background-position: left center;
+    background-repeat: no-repeat;
+        border: none;
+        border-left: 2px solid #00B8D4;
+        text-align: left;
+        padding-left: 8px;
+        margin: 0px;
+}
+
+QMainWindow{
+    background-color : #FFFFFF;
+    /*background-color : qlineargradient(x1:0, y1:0, x2:1, y2:1,stop: 0 #292929, stop: 1 #414345);*/
+}
+
+QtMaterialAppBar{
+    qproperty-backgroundColor : #00C853; /*rgb(0,150,136) ;*/
+
+}
+
+QtMaterialRaisedButton{
+    qproperty-backgroundColor : #4DB6AC;
+}

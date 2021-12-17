@@ -336,14 +336,14 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal
  }
  QScrollBar::handle:vertical {	
 	background: rgb(189, 147, 249);
-    min-height: 25px;
+        min-height: 25px;
 	border-radius: 4px
  }
  QScrollBar::add-line:vertical {
      border: none;
     background: rgb(55, 63, 77);
      height: 20px;
-	border-bottom-left-radius: 4px;
+        border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
      subcontrol-position: bottom;
      subcontrol-origin: margin;

@@ -1,0 +1,44 @@
+QToolTip {
+        color: #ffffff;
+        background-color: rgba(33, 37, 43, 180);
+        border: 1px solid rgb(44, 49, 58);
+        background-image: none;
+        background-position: left center;
+        background-repeat: no-repeat;
+        border: none;
+        border-left: 2px solid #4CAF50;
+        text-align: left;
+        padding-left: 8px;
+        margin: 0px;
+}
+
+QMainWindow{
+    background-color : #292929;
+    /*background-color : qlineargradient(x1:0, y1:0, x2:1, y2:1,stop: 0 #292929, stop: 1 #414345);*/
+}
+
+QtMaterialAppBar{
+    qproperty-backgroundColor : #00AA8D; /*rgb(0,150,136) ;*/
+
+}
+
+QtMaterialRaisedButton{
+    qproperty-backgroundColor : #00BF9A;
+}
+/* green #4CAF50*/
+/*
+QtMaterialDrawer{
+background-color : red;
+color: blue;
+border-color: darkblue;
+font : QFont(MS Shell Dlg 2,8.25,-1,5,50,0,0,0,0,0);
+
+}
+*/
+
+/*
+const QColor Btn_ico_bg();
+const QColor Btn_ico_hvr_bg();
+const QColor Btn_ico_txt();
+const QColor Btn_ico_hvr_txt();
+*/
