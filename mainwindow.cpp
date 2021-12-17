@@ -23,13 +23,12 @@ MainWindow::MainWindow(QWidget *parent):
     shadow(this)
 {
 
-        qDebug()<<"Window building";
+        //qDebug()<<"Window building";
         setAttribute(Qt::WA_StyleSheet);
         setAttribute(Qt::WA_StyledBackground);
         // SET AS GLOBAL WIDGETS
         ui->setupUi(this);
-        qDebug()<<"Window UI setup";
-        //auto widgets = ui;
+        //qDebug()<<"Window UI setup";
 
         // USE CUSTOM TITLE BAR | USE AS "False" FOR MAC OR LINUX
         settings.ENABLE_CUSTOM_TITLE_BAR = true;
@@ -47,14 +46,14 @@ MainWindow::MainWindow(QWidget *parent):
 
         // SET UI DEFINITIONS
         //UIFunctions.uiDefinitions(self)
-        qDebug()<<"Window setting uiDefinitions";
+        //qDebug()<<"Window setting uiDefinitions";
 
         if (settings.ENABLE_CUSTOM_TITLE_BAR){
             //STANDARD TITLE BAR
             setWindowFlags(Qt::FramelessWindowHint);
             setAttribute(Qt::WA_TranslucentBackground);
             ui->titleRightInfo->installEventFilter(this);
-            qDebug()<<"building grips";
+            //qDebug()<<"building grips";
             /*
             delete left_grip;
             delete right_grip;
@@ -330,10 +329,13 @@ void MainWindow::selectStandardMenu(QString widget){
 }
 // RESET SELECTION
 void MainWindow::resetStyle(QString widget){
-    QList<QPushButton *> widgets = ui->topMenu->findChildren<QPushButton *>(widget);
+    QList<QPushButton *> widgets = ui->topMenu->findChildren<QPushButton *>();
     for (int i = 0; i < widgets.size(); ++i) {
-            widgets[i]->setStyleSheet(deselectMenu(widgets[i]->styleSheet()));
+            if (widgets[i]->objectName() != widget)
+                widgets[i]->setStyleSheet(deselectMenu(widgets[i]->styleSheet()));
+            //QString style= deselectMenu(widgets[i]->styleSheet());
     }
+
 }
 
 void MainWindow::theme(QFile &file,bool useCustomTheme){
@@ -341,7 +343,7 @@ void MainWindow::theme(QFile &file,bool useCustomTheme){
         return;
     if ( !file.exists() )
     {
-       qWarning() << "Unable to set dark stylesheet, file not found";
+       qWarning() << "Unable to set stylesheet, file "<< file.symLinkTarget() <<" not found";
     }
     else
     {
@@ -349,11 +351,28 @@ void MainWindow::theme(QFile &file,bool useCustomTheme){
        //QByteArray ba = file.readAll();
        // QTextCodec::codecForName("UTF-8");
        //QTextStream ts( &file );
-       qApp->setStyleSheet(QString::fromUtf8(file.readAll()));
-       qDebug() << "Theme  set";
+       QString style = QString::fromUtf8(file.readAll());
+       ui->styleSheet->setStyleSheet(style);
+       ui->styleSheet->style()->unpolish(ui->widgets);
+       ui->styleSheet->style()->polish(ui->widgets);
+       ui->styleSheet->update();
+
+
+       setStyleSheet(style);
+       this->style()->unpolish(this);
+       this->style()->polish(this);
+       ui->styleSheet->update();
+
+       //ui->styleSheet->style()->polish(qApp);
+       //QEvent event(QEvent::StyleChange);
+       //QApplication::sendEvent(this, &event);
+       //ui->styleSheet->repaint();
+       //ui->styleSheet->updateGeometry();
+       qDebug() << "Style sheet set";
     }
 
 }
+
 
 void MainWindow::dobleClickMaximizeRestore(QEvent *event){
     // IF DOUBLE CLICK CHANGE STATUS
@@ -412,21 +431,40 @@ void MainWindow::buttonClick(){
         // SHOW HOME PAGE
         if (btnName == "btn_home"){
             ui->stackedWidget->setCurrentWidget(ui->home);
+            qDebug()<<ui->btn_home->styleSheet();
             resetStyle(btnName);
             ui->btn_home->setStyleSheet(selectMenu(ui->btn_home->styleSheet()));
+            qDebug()<<ui->btn_home->styleSheet();
+//            ui->btn_home->setStyleSheet(selectMenu(ui->btn_home->styleSheet()));
         }
         // SHOW WIDGETS PAGE
         else if (btnName == "btn_widgets"){
             ui->stackedWidget->setCurrentWidget(ui->widgets);
+            qDebug()<<ui->btn_widgets->styleSheet();
             resetStyle(btnName);
             ui->btn_widgets->setStyleSheet(selectMenu(ui->btn_widgets->styleSheet()));
+            qDebug()<<ui->btn_widgets->styleSheet();
+            //ui->btn_widgets->setStyleSheet(selectMenu(ui->btn_widgets->styleSheet()));
         }
         // SHOW NEW PAGE
         else if (btnName == "btn_new"){
+            qDebug()<<ui->btn_new->styleSheet();
             ui->stackedWidget->setCurrentWidget(ui->new_page); // # SET PAGE
             resetStyle(btnName); // # RESET ANOTHERS BUTTONS SELECTED
-            ui->btn_new->setStyleSheet(selectMenu(ui->btn_new->styleSheet())); // # SELECT MENU
+            ui->btn_new->setStyleSheet(selectMenu(ui->btn_new->styleSheet()));
+            qDebug()<<ui->btn_new->styleSheet();
         }
+
+        //ui->styleSheet->setStyleSheet(style);
+        ui->styleSheet->style()->unpolish(ui->widgets);
+        ui->styleSheet->style()->polish(ui->widgets);
+        ui->styleSheet->update();
+
+
+        //setStyleSheet(style);
+        this->style()->unpolish(this);
+        this->style()->polish(this);
+        this->update();
         //else if (btnName == "btn_save")
             //qDebug("Save BTN clicked!");
 
@@ -437,18 +475,11 @@ void MainWindow::buttonClick(){
 
 void MainWindow::resizeEvent(QResizeEvent *event){
         // Update Size Grips
-        Q_UNUSED(event)
-        //qDebug()<<"Resizing";
+        Q_UNUSED(event);
         resize_grips();
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *event){
     // SET DRAG POS WINDOW
     dragPos = event->globalPos();
-
-    // PRINT MOUSE EVENTS
-    //if (event->buttons() == Qt::LeftButton)
-        //qDebug("Mouse click: LEFT CLICK");
-    //if (event->buttons() == Qt::RightButton)
-        //qDebug("Mouse click: RIGHT CLICK");
 }

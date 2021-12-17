@@ -73,6 +73,8 @@ class MainWindow: public QMainWindow
         bool eventFilter(QObject *obj, QEvent *ev) override;
         void resizeEvent(QResizeEvent *event) override;
         void mousePressEvent(QMouseEvent *event) override;
+        //void paintEvent(QPaintEvent *event) override;
+
     protected slots:
         void buttonClick(void);
             

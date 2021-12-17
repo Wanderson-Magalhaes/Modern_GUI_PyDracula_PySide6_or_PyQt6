@@ -104,9 +104,8 @@ bool CustomGrip::eventFilter(QObject *obj, QEvent *event)
 {
     if (event->type() == QEvent::MouseMove ){
         QString sender_name = obj->objectName();
-        qDebug()<<"eventFilter "<<sender_name;
         QMouseEvent *e=static_cast<QMouseEvent*>(event);
-        //qDebug() << "dobleClickMaximizeRestore";
+
         if (sender_name=="container_top") {
             resize_top(e);
         }
@@ -115,7 +114,6 @@ bool CustomGrip::eventFilter(QObject *obj, QEvent *event)
         }
         else if(sender_name=="left"){
             resize_left(e);
-            qDebug()<<"Resize left";
         }
         else if(sender_name=="right"){
             resize_right(e);
@@ -176,7 +174,6 @@ CustomGrip::CustomGrip(QWidget *parent, Qt::Edge position, bool disable_color) :
     topbot_frame->setFrameShadow(QFrame::Raised);
 
     */
-    qDebug()<<"Building "<< position <<" Custom grip";
     switch (position) {
         case Qt::TopEdge:
             framegrip.setObjectName("container_top");

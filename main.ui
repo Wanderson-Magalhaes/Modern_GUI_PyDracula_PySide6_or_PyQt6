@@ -876,6 +876,9 @@ Button */
                   <property name="text">
                    <string>Home</string>
                   </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
                  </widget>
                 </item>
                 <item>
@@ -912,6 +915,9 @@ Button */
                   </property>
                   <property name="text">
                    <string>Widgets</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
@@ -950,6 +956,9 @@ Button */
                   <property name="text">
                    <string>New</string>
                   </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
                  </widget>
                 </item>
                 <item>
@@ -986,6 +995,9 @@ Button */
                   </property>
                   <property name="text">
                    <string>Save</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>

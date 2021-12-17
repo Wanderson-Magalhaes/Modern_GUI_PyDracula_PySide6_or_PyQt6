@@ -805,6 +805,7 @@ public:
         btn_home->setCursor(QCursor(Qt::PointingHandCursor));
         btn_home->setLayoutDirection(Qt::LeftToRight);
         btn_home->setStyleSheet(QString::fromUtf8("background-image: url(:/icons/images/icons/cil-home.png);"));
+        btn_home->setCheckable(true);
 
         verticalLayout_8->addWidget(btn_home);
 
@@ -817,6 +818,7 @@ public:
         btn_widgets->setCursor(QCursor(Qt::PointingHandCursor));
         btn_widgets->setLayoutDirection(Qt::LeftToRight);
         btn_widgets->setStyleSheet(QString::fromUtf8("background-image: url(:/icons/images/icons/cil-gamepad.png);"));
+        btn_widgets->setCheckable(true);
 
         verticalLayout_8->addWidget(btn_widgets);
 
@@ -829,6 +831,7 @@ public:
         btn_new->setCursor(QCursor(Qt::PointingHandCursor));
         btn_new->setLayoutDirection(Qt::LeftToRight);
         btn_new->setStyleSheet(QString::fromUtf8("background-image: url(:/icons/images/icons/cil-file.png);"));
+        btn_new->setCheckable(true);
 
         verticalLayout_8->addWidget(btn_new);
 
@@ -841,6 +844,7 @@ public:
         btn_save->setCursor(QCursor(Qt::PointingHandCursor));
         btn_save->setLayoutDirection(Qt::LeftToRight);
         btn_save->setStyleSheet(QString::fromUtf8("background-image: url(:/icons/images/icons/cil-save.png)"));
+        btn_save->setCheckable(true);
 
         verticalLayout_8->addWidget(btn_save);
 
