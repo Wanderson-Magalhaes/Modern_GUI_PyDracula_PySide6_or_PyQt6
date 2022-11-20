@@ -17,6 +17,7 @@
 import sys
 import os
 import platform
+import requests
 
 # IMPORT / GUI AND MODULES AND WIDGETS
 # ///////////////////////////////////////////////////////////////
@@ -38,6 +39,13 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
         global widgets
         widgets = self.ui
+        self.frimestate = 0
+        self.previous_run = []
+        self.txSave = {}
+        self.rxSave = {}
+        self.targetSave = {}
+
+        widgets.label.setPixmap(QPixmap("./images/images/picture.png"))
 
         # USE CUSTOM TITLE BAR | USE AS "False" FOR MAC OR LINUX
         # ///////////////////////////////////////////////////////////////
@@ -45,15 +53,15 @@ class MainWindow(QMainWindow):
 
         # APP NAME
         # ///////////////////////////////////////////////////////////////
-        title = "PyDracula - Modern GUI"
-        description = "PyDracula APP - Theme with colors based on Dracula for Python."
+        title = "PyQt GUI"
+        description = "Sonobuoy MAP GUI"
         # APPLY TEXTS
         self.setWindowTitle(title)
         widgets.titleRightInfo.setText(description)
 
         # TOGGLE MENU
         # ///////////////////////////////////////////////////////////////
-        widgets.toggleButton.clicked.connect(lambda: UIFunctions.toggleMenu(self, True))
+        # widgets.toggleButton.clicked.connect(lambda: UIFunctions.toggleMenu(self, True))
 
         # SET UI DEFINITIONS
         # ///////////////////////////////////////////////////////////////
@@ -61,16 +69,17 @@ class MainWindow(QMainWindow):
 
         # QTableWidget PARAMETERS
         # ///////////////////////////////////////////////////////////////
-        widgets.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        # widgets.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
         # BUTTONS CLICK
         # ///////////////////////////////////////////////////////////////
 
         # LEFT MENUS
-        widgets.btn_home.clicked.connect(self.buttonClick)
+        widgets.btn_setting.clicked.connect(self.buttonClick)
         widgets.btn_widgets.clicked.connect(self.buttonClick)
-        widgets.btn_new.clicked.connect(self.buttonClick)
-        widgets.btn_save.clicked.connect(self.buttonClick)
+        widgets.btn_map.clicked.connect(self.buttonClick)
+        widgets.btn_kill.clicked.connect(self.buttonClick)
+        widgets.settingBtn.clicked.connect(self.buttonClick)
 
         # EXTRA LEFT BOX
         def openCloseLeftBox():
@@ -81,7 +90,6 @@ class MainWindow(QMainWindow):
         # EXTRA RIGHT BOX
         def openCloseRightBox():
             UIFunctions.toggleRightBox(self, True)
-        widgets.settingsTopBtn.clicked.connect(openCloseRightBox)
 
         # SHOW APP
         # ///////////////////////////////////////////////////////////////
@@ -103,7 +111,7 @@ class MainWindow(QMainWindow):
         # SET HOME PAGE AND SELECT MENU
         # ///////////////////////////////////////////////////////////////
         widgets.stackedWidget.setCurrentWidget(widgets.home)
-        widgets.btn_home.setStyleSheet(UIFunctions.selectMenu(widgets.btn_home.styleSheet()))
+        widgets.btn_map.setStyleSheet(UIFunctions.selectMenu(widgets.btn_map.styleSheet()))
 
 
     # BUTTONS CLICK
@@ -114,30 +122,90 @@ class MainWindow(QMainWindow):
         btn = self.sender()
         btnName = btn.objectName()
 
-        # SHOW HOME PAGE
-        if btnName == "btn_home":
-            widgets.stackedWidget.setCurrentWidget(widgets.home)
-            UIFunctions.resetStyle(self, btnName)
-            btn.setStyleSheet(UIFunctions.selectMenu(btn.styleSheet()))
-
-        # SHOW WIDGETS PAGE
-        if btnName == "btn_widgets":
+        # 설정 페이지
+        if btnName == "btn_setting":
             widgets.stackedWidget.setCurrentWidget(widgets.widgets)
             UIFunctions.resetStyle(self, btnName)
             btn.setStyleSheet(UIFunctions.selectMenu(btn.styleSheet()))
 
-        # SHOW NEW PAGE
-        if btnName == "btn_new":
+            self.frimestate = 0
+            widgets.btn_widgets.setStyleSheet("background-image: url(:/icons/images/icons/cil-wifi-signal-off.png);")
+            widgets.btn_widgets.setDisabled(True)
+            if self.txSave:
+                self.txSave['label'].setHidden(True)
+            if self.rxSave:
+                self.rxSave['label'].setHidden(True)
+            if self.targetSave:
+                self.targetSave['label'].setHidden(True)
+
+        # 맵 페이지
+        if btnName == "btn_map":
             widgets.stackedWidget.setCurrentWidget(widgets.new_page) # SET PAGE
             UIFunctions.resetStyle(self, btnName) # RESET ANOTHERS BUTTONS SELECTED
             btn.setStyleSheet(UIFunctions.selectMenu(btn.styleSheet())) # SELECT MENU
+            widgets.btn_widgets.setEnabled(True)
+            if self.txSave:
+                self.txSave['label'].setHidden(False)
+            if self.rxSave:
+                self.rxSave['label'].setHidden(False)
+            if self.targetSave:
+                self.targetSave['label'].setHidden(False)
 
-        if btnName == "btn_save":
-            print("Save BTN clicked!")
+        # 맵 페이지에 아이콘라벨 입히기
+        if btnName == "btn_widgets":
+            if self.frimestate == 1:
+                self.frimestate = 0
+                widgets.btn_widgets.setStyleSheet("background-image: url(:/icons/images/icons/cil-wifi-signal-off.png);")
+                
+            else:
+                self.frimestate = 1
+                widgets.btn_widgets.setStyleSheet("background-image: url(:/icons/images/icons/cil-wifi-signal-0.png);")
+                if self.txSave:
+                    self.txSave['label'].setHidden(False)
+                if self.rxSave:
+                    self.rxSave['label'].setHidden(False)
+                if self.targetSave:
+                    self.targetSave['label'].setHidden(False)
+
+        # 아이콘라벨 모두 죽이기
+        if btnName == "btn_kill":
+            self.txSave['label'].close()
+            self.rxSave['label'].close()
+            self.targetSave['label'].close()
+            self.txSave.clear()
+            self.rxSave.clear()
+            self.targetSave.clear()
+
+        # 맵 좌표 이동시키기
+        if btnName == "settingBtn":
+
+            BASE_URL = 'https://maps.googleapis.com/maps/api/staticmap?'
+            API_KEY  = 'AIzaSyCHWLALETpUW1cVZhMG5Z_1LKS86DpcvI8'
+            POS = widgets.areaEdit.text() + ',' + widgets.areaEdit_2.text()
+            URL = (BASE_URL 
+            + f'center={POS}'
+            + f'&zoom=6'
+            + f'&size={1200}x{800}&scale=2'
+            + f'&maptype=satellite'
+            + f'&key={API_KEY}')
+            
+            r = requests.get(URL)
+            file = open("./images/images/picture2.png","wb")
+            file.write(r.content)
+            file.close()
+            widgets.label.setPixmap(QPixmap("./images/images/picture2.png"))
+            widgets.currentArea.setText('현재 좌표 : (' + widgets.areaEdit.text() + ',' + widgets.areaEdit_2.text() + ')')
 
         # PRINT BTN NAME
         print(f'Button "{btnName}" pressed!')
 
+    def mouseMoveEvent(self, event):
+        # MOVE WINDOW
+        if Settings.ENABLE_CUSTOM_TITLE_BAR:
+            if event.buttons() == Qt.LeftButton:
+                self.move(self.pos() + event.globalPos() - self.dragPos)
+                self.dragPos = event.globalPos()
+                event.accept()     
 
     # RESIZE EVENTS
     # ///////////////////////////////////////////////////////////////
@@ -151,14 +219,55 @@ class MainWindow(QMainWindow):
         # SET DRAG POS WINDOW
         self.dragPos = event.globalPos()
 
-        # PRINT MOUSE EVENTS
-        if event.buttons() == Qt.LeftButton:
-            print('Mouse click: LEFT CLICK')
-        if event.buttons() == Qt.RightButton:
-            print('Mouse click: RIGHT CLICK')
+        # 마우스 좌클릭시 TX 아이콘 띄우기
+        if event.buttons() == Qt.LeftButton and self.frimestate == 1:
+            if self.txSave:
+                self.txSave['label'].close()
+                self.txSave.clear()
+
+            self.label = QLabel(self)
+            self.label.setGeometry(event.pos().x(), event.pos().y(), 16, 16)
+            pixmap = QPixmap("./images/icons/cil-cursor.png")
+            self.label.setPixmap(pixmap)
+            self.label.show()
+            self.txSave = {'label':self.label, 'posX':event.pos().x(), 'posY':event.pos().y()}
+            widgets.txXEdit.setText(str(event.pos().x()))
+            widgets.txYEdit.setText(str(event.pos().y()))
+        
+        # 마우스 우클릭시 RX 아이콘 띄우기
+        if event.buttons() == Qt.RightButton and self.frimestate == 1:
+            if self.rxSave:
+                self.rxSave['label'].close()
+                self.rxSave.clear()
+
+            self.label = QLabel(self)
+            self.label.setGeometry(event.pos().x(), event.pos().y(), 16, 16)
+            pixmap = QPixmap("./images/icons/cil-wifi-signal-4.png")
+            self.label.setPixmap(pixmap)
+            self.label.show()
+            self.rxSave = {'label':self.label, 'posX':event.pos().x(), 'posY':event.pos().y()}
+            widgets.rxXEdit.setText(str(event.pos().x()))
+            widgets.rxYEdit.setText(str(event.pos().y()))
+
+        
+        
+        # 마우스 중간클릭시 타겟 아이콘 띄우기
+        if event.buttons() == Qt.MiddleButton and self.frimestate == 1:
+            if self.targetSave:
+                self.targetSave['label'].close()
+                self.targetSave.clear()
+            self.label = QLabel(self)
+            self.label.setGeometry(event.pos().x(), event.pos().y(), 16, 16)
+            pixmap = QPixmap("./images/icons/cil-wifi-signal-0.png")
+            self.label.setPixmap(pixmap)
+            self.label.show()
+            self.targetSave = {'label':self.label, 'posX':event.pos().x(), 'posY':event.pos().y()}
+            widgets.targetXEdit.setText(str(event.pos().x()))
+            widgets.targetYEdit.setText(str(event.pos().y()))
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    app.setWindowIcon(QIcon("icon.ico"))
+    app.setWindowIcon(QIcon("sono.ico"))
     window = MainWindow()
     sys.exit(app.exec_())
