@@ -1,4 +1,4 @@
-class Settings():
+class Settings(object):
     # APP SETTINGS
     # ///////////////////////////////////////////////////////////////
     ENABLE_CUSTOM_TITLE_BAR = True

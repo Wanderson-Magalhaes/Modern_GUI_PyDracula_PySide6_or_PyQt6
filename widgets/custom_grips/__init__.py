@@ -14,4 +14,4 @@
 #
 # ///////////////////////////////////////////////////////////////
 
-from . custom_grips import CustomGrip
+from widgets.custom_grips.custom_grips import CustomGrip
