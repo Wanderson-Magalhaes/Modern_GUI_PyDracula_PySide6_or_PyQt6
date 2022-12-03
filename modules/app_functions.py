@@ -16,11 +16,16 @@
 
 # MAIN FILE
 # ///////////////////////////////////////////////////////////////
-from main import *
+from modules import (
+    UiBeautify,
+    Settings
+)
+
 
 # WITH ACCESS TO MAIN WINDOW WIDGETS
 # ///////////////////////////////////////////////////////////////
-class AppFunctions(MainWindow):
+class AppFunctions(UiBeautify):
+
     def setThemeHack(self):
         Settings.BTN_LEFT_BOX_COLOR = "background-color: #495474;"
         Settings.BTN_RIGHT_BOX_COLOR = "background-color: #495474;"
@@ -30,12 +35,14 @@ class AppFunctions(MainWindow):
         """
 
         # SET MANUAL STYLES
-        self.ui.lineEdit.setStyleSheet("background-color: #6272a4;")
-        self.ui.pushButton.setStyleSheet("background-color: #6272a4;")
-        self.ui.plainTextEdit.setStyleSheet("background-color: #6272a4;")
-        self.ui.tableWidget.setStyleSheet("QScrollBar:vertical { background: #6272a4; } QScrollBar:horizontal { background: #6272a4; }")
-        self.ui.scrollArea.setStyleSheet("QScrollBar:vertical { background: #6272a4; } QScrollBar:horizontal { background: #6272a4; }")
-        self.ui.comboBox.setStyleSheet("background-color: #6272a4;")
-        self.ui.horizontalScrollBar.setStyleSheet("background-color: #6272a4;")
-        self.ui.verticalScrollBar.setStyleSheet("background-color: #6272a4;")
-        self.ui.commandLinkButton.setStyleSheet("color: #ff79c6;")
+        self.lineEdit.setStyleSheet("background-color: #6272a4;")
+        self.pushButton.setStyleSheet("background-color: #6272a4;")
+        self.plainTextEdit.setStyleSheet("background-color: #6272a4;")
+        self.tableWidget.setStyleSheet(
+            "QScrollBar:vertical { background: #6272a4; } QScrollBar:horizontal { background: #6272a4; }")
+        self.scrollArea.setStyleSheet(
+            "QScrollBar:vertical { background: #6272a4; } QScrollBar:horizontal { background: #6272a4; }")
+        self.comboBox.setStyleSheet("background-color: #6272a4;")
+        self.horizontalScrollBar.setStyleSheet("background-color: #6272a4;")
+        self.verticalScrollBar.setStyleSheet("background-color: #6272a4;")
+        self.commandLinkButton.setStyleSheet("color: #ff79c6;")

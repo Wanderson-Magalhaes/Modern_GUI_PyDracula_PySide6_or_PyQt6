@@ -14,12 +14,23 @@
 #
 # ///////////////////////////////////////////////////////////////
 
-from PySide6.QtCore import *
-from PySide6.QtGui import *
-from PySide6.QtWidgets import *
+from PySide6.QtCore import (
+    Qt,
+    QRect,
+    QSize
+)
+from PySide6.QtGui import QCursor
+
+from PySide6.QtWidgets import (
+    QWidget,
+    QSizeGrip,
+    QFrame,
+    QHBoxLayout
+)
+
 
 class CustomGrip(QWidget):
-    def __init__(self, parent, position, disable_color = False):
+    def __init__(self, parent, position, disable_color=False):
 
         # SETUP UI
         QWidget.__init__(self)
@@ -45,6 +56,7 @@ class CustomGrip(QWidget):
                 geo.setTop(geo.bottom() - height)
                 self.parent.setGeometry(geo)
                 event.accept()
+
             self.wi.top.mouseMoveEvent = resize_top
 
             # ENABLE COLOR
@@ -69,6 +81,7 @@ class CustomGrip(QWidget):
                 height = max(self.parent.minimumHeight(), self.parent.height() + delta.y())
                 self.parent.resize(self.parent.width(), height)
                 event.accept()
+
             self.wi.bottom.mouseMoveEvent = resize_bottom
 
             # ENABLE COLOR
@@ -91,6 +104,7 @@ class CustomGrip(QWidget):
                 geo.setLeft(geo.right() - width)
                 self.parent.setGeometry(geo)
                 event.accept()
+
             self.wi.leftgrip.mouseMoveEvent = resize_left
 
             # ENABLE COLOR
@@ -108,12 +122,12 @@ class CustomGrip(QWidget):
                 width = max(self.parent.minimumWidth(), self.parent.width() + delta.x())
                 self.parent.resize(width, self.parent.height())
                 event.accept()
+
             self.wi.rightgrip.mouseMoveEvent = resize_right
 
             # ENABLE COLOR
             if disable_color:
                 self.wi.rightgrip.setStyleSheet("background: transparent")
-
 
     def mouseReleaseEvent(self, event):
         self.mousePos = None
@@ -131,6 +145,7 @@ class CustomGrip(QWidget):
         elif hasattr(self.wi, 'rightgrip'):
             self.wi.rightgrip.setGeometry(0, 0, 10, self.height() - 20)
 
+
 class Widgets(object):
     def top(self, Form):
         if not Form.objectName():
@@ -140,8 +155,8 @@ class Widgets(object):
         self.container_top.setGeometry(QRect(0, 0, 500, 10))
         self.container_top.setMinimumSize(QSize(0, 10))
         self.container_top.setMaximumSize(QSize(16777215, 10))
-        self.container_top.setFrameShape(QFrame.NoFrame)
-        self.container_top.setFrameShadow(QFrame.Raised)
+        self.container_top.setFrameShape(QFrame.Shape.NoFrame)
+        self.container_top.setFrameShadow(QFrame.Shadow.Raised)
         self.top_layout = QHBoxLayout(self.container_top)
         self.top_layout.setSpacing(0)
         self.top_layout.setObjectName(u"top_layout")
@@ -152,15 +167,15 @@ class Widgets(object):
         self.top_left.setMaximumSize(QSize(10, 10))
         self.top_left.setCursor(QCursor(Qt.SizeFDiagCursor))
         self.top_left.setStyleSheet(u"background-color: rgb(33, 37, 43);")
-        self.top_left.setFrameShape(QFrame.NoFrame)
-        self.top_left.setFrameShadow(QFrame.Raised)
+        self.top_left.setFrameShape(QFrame.Shape.NoFrame)
+        self.top_left.setFrameShadow(QFrame.Shadow.Raised)
         self.top_layout.addWidget(self.top_left)
         self.top = QFrame(self.container_top)
         self.top.setObjectName(u"top")
         self.top.setCursor(QCursor(Qt.SizeVerCursor))
         self.top.setStyleSheet(u"background-color: rgb(85, 255, 255);")
-        self.top.setFrameShape(QFrame.NoFrame)
-        self.top.setFrameShadow(QFrame.Raised)
+        self.top.setFrameShape(QFrame.Shape.NoFrame)
+        self.top.setFrameShadow(QFrame.Shadow.Raised)
         self.top_layout.addWidget(self.top)
         self.top_right = QFrame(self.container_top)
         self.top_right.setObjectName(u"top_right")
@@ -168,8 +183,8 @@ class Widgets(object):
         self.top_right.setMaximumSize(QSize(10, 10))
         self.top_right.setCursor(QCursor(Qt.SizeBDiagCursor))
         self.top_right.setStyleSheet(u"background-color: rgb(33, 37, 43);")
-        self.top_right.setFrameShape(QFrame.NoFrame)
-        self.top_right.setFrameShadow(QFrame.Raised)
+        self.top_right.setFrameShape(QFrame.Shape.NoFrame)
+        self.top_right.setFrameShadow(QFrame.Shadow.Raised)
         self.top_layout.addWidget(self.top_right)
 
     def bottom(self, Form):
@@ -180,8 +195,8 @@ class Widgets(object):
         self.container_bottom.setGeometry(QRect(0, 0, 500, 10))
         self.container_bottom.setMinimumSize(QSize(0, 10))
         self.container_bottom.setMaximumSize(QSize(16777215, 10))
-        self.container_bottom.setFrameShape(QFrame.NoFrame)
-        self.container_bottom.setFrameShadow(QFrame.Raised)
+        self.container_bottom.setFrameShape(QFrame.Shape.NoFrame)
+        self.container_bottom.setFrameShadow(QFrame.Shadow.Raised)
         self.bottom_layout = QHBoxLayout(self.container_bottom)
         self.bottom_layout.setSpacing(0)
         self.bottom_layout.setObjectName(u"bottom_layout")
@@ -192,15 +207,15 @@ class Widgets(object):
         self.bottom_left.setMaximumSize(QSize(10, 10))
         self.bottom_left.setCursor(QCursor(Qt.SizeBDiagCursor))
         self.bottom_left.setStyleSheet(u"background-color: rgb(33, 37, 43);")
-        self.bottom_left.setFrameShape(QFrame.NoFrame)
-        self.bottom_left.setFrameShadow(QFrame.Raised)
+        self.bottom_left.setFrameShape(QFrame.Shape.NoFrame)
+        self.bottom_left.setFrameShadow(QFrame.Shadow.Raised)
         self.bottom_layout.addWidget(self.bottom_left)
         self.bottom = QFrame(self.container_bottom)
         self.bottom.setObjectName(u"bottom")
         self.bottom.setCursor(QCursor(Qt.SizeVerCursor))
         self.bottom.setStyleSheet(u"background-color: rgb(85, 170, 0);")
-        self.bottom.setFrameShape(QFrame.NoFrame)
-        self.bottom.setFrameShadow(QFrame.Raised)
+        self.bottom.setFrameShape(QFrame.Shape.NoFrame)
+        self.bottom.setFrameShadow(QFrame.Shadow.Raised)
         self.bottom_layout.addWidget(self.bottom)
         self.bottom_right = QFrame(self.container_bottom)
         self.bottom_right.setObjectName(u"bottom_right")
@@ -208,8 +223,8 @@ class Widgets(object):
         self.bottom_right.setMaximumSize(QSize(10, 10))
         self.bottom_right.setCursor(QCursor(Qt.SizeFDiagCursor))
         self.bottom_right.setStyleSheet(u"background-color: rgb(33, 37, 43);")
-        self.bottom_right.setFrameShape(QFrame.NoFrame)
-        self.bottom_right.setFrameShadow(QFrame.Raised)
+        self.bottom_right.setFrameShape(QFrame.Shape.NoFrame)
+        self.bottom_right.setFrameShadow(QFrame.Shadow.Raised)
         self.bottom_layout.addWidget(self.bottom_right)
 
     def left(self, Form):
@@ -221,8 +236,8 @@ class Widgets(object):
         self.leftgrip.setMinimumSize(QSize(10, 0))
         self.leftgrip.setCursor(QCursor(Qt.SizeHorCursor))
         self.leftgrip.setStyleSheet(u"background-color: rgb(255, 121, 198);")
-        self.leftgrip.setFrameShape(QFrame.NoFrame)
-        self.leftgrip.setFrameShadow(QFrame.Raised)
+        self.leftgrip.setFrameShape(QFrame.Shape.NoFrame)
+        self.leftgrip.setFrameShadow(QFrame.Shadow.Raised)
 
     def right(self, Form):
         if not Form.objectName():
@@ -234,5 +249,5 @@ class Widgets(object):
         self.rightgrip.setMinimumSize(QSize(10, 0))
         self.rightgrip.setCursor(QCursor(Qt.SizeHorCursor))
         self.rightgrip.setStyleSheet(u"background-color: rgb(255, 0, 127);")
-        self.rightgrip.setFrameShape(QFrame.NoFrame)
-        self.rightgrip.setFrameShadow(QFrame.Raised)
+        self.rightgrip.setFrameShape(QFrame.Shape.NoFrame)
+        self.rightgrip.setFrameShadow(QFrame.Shadow.Raised)
